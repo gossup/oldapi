@@ -1,21 +1,13 @@
-# HelloWorld
+# Python sample app using no package manager
 
-A pretty simple golang application that, in its most basic form, will
-return "Hello World" back to the caller.
+## Building
 
-Check the source code for all of the things you can make it do either via
-environment variables or query parameters. This is good for testing the
-system to see how it reacts - for example, when the app crashes.
+`pack build no-package-manager-sample --buildpack paketo-buildpacks/python`
 
-Note: we added some extra logic to this so I can also be used as a batch job
-but you can ignore that if all you care about is the App side of things.
+## Running
 
-- - -
+`docker run --interactive --tty --env PORT=8080 --publish 8080:8080 no-package-manager-sample`
 
-As noted in [the main README](../README.md), this sample has two pieces:
+## Viewing
 
-- a `build` script which will build the container image(s) used
-- a `run` script which deploys resources that use those images
-
-The main purpose of this example is the `run` script, but the `build`
-script is included for complete educational (and reuse) purposes. 
+`curl http://localhost:8080`
