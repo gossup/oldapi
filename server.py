@@ -10,7 +10,7 @@ def main():
     
 @app.route('/next')
 def next():
-    hello = "HELLO NEXT"
+    hello = os.env.get('XXX')
     return hello
 
 if __name__ == '__main__':
