@@ -3,7 +3,7 @@ from flask import Flask, render_template
 
 app = Flask(__name__)
 
-@app.route('/bitch')
+@app.route('/')
 def main():
     hello = "HELLO BITCH"
     return hello
