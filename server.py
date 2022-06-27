@@ -9,7 +9,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    port = os.getenv("PORT")
+    port = os.getenviron.get("PORT")
     return port
     
 @app.route('/next')
@@ -22,12 +22,12 @@ def next():
     
 @app.route('/again')
 def again():
-    n = sys.argv[1]
-    return n
+    name = os.getenviron.get("name")
+    return name
     
 @app.route('/andagain')
 def andagain():
-    return sys.argv
+    return sys.args
 
 if __name__ == '__main__':
     app.run()
