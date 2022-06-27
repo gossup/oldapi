@@ -13,10 +13,12 @@ def main():
     return port
     
 @app.route('/next')
-def next(args):
-    if not args:
-        return "Nothing"
-    return args
+def next():
+    result = ""
+    for i in sys.argv:
+        old = result
+        result = old + i
+    return result
     
 @app.route('/again')
 def again():
@@ -25,7 +27,7 @@ def again():
     
 @app.route('/andagain')
 def andagain():
-    return sys.argv[1]
+    return sys.argv
 
 if __name__ == '__main__':
     app.run()
