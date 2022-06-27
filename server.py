@@ -10,15 +10,11 @@ app = Flask(__name__)
 @app.route('/')
 def main(args):
     bitch = args.get('name')
-    if bitch:
-        return "{}".format(bitch)
-    else:
-        return "NOTHING"
+    return bitch
     
 @app.route('/next')
-def next():
-    hello = "HI"
-    return hello
+def next(args):
+    return args
 
 if __name__ == '__main__':
     app.run()
