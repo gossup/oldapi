@@ -9,16 +9,16 @@ app = Flask(__name__)
 
 @app.route('/')
 def main():
-    bitch = args.get('name')
-    return bitch
+    port = os.getenv("PORT")
+    return port
     
 @app.route('/next')
-def next():
-    return os.args
+def next(args):
+    return args
     
 @app.route('/again')
 def again():
-    return sys.args
+    return "!"
 
 if __name__ == '__main__':
     app.run()
