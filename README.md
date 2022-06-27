@@ -1,12 +1,12 @@
-# Python sample app using no package manager
+# Python sample app using poetry package manager
 
 ## Building
 
-`pack build no-package-manager-sample --buildpack paketo-buildpacks/python`
+`pack build poetry-sample --buildpack paketo-buildpacks/python`
 
 ## Running
 
-`docker run --interactive --tty --env PORT=8080 --publish 8080:8080 no-package-manager-sample`
+`docker run --interactive --tty --env PORT=8080 --publish 8080:8080 poetry-sample`
 
 ## Viewing
 
