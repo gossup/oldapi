@@ -13,19 +13,19 @@ def main():
     return port
     
 @app.route('/next')
-def next():
-    arg = os.getarg("name")
-    return port
+def next(args):
+    if not args:
+        return "Nothing"
+    return args
     
 @app.route('/again')
 def again():
-    rg = os.getargs("name")
-    return rg
+    n = sys.argv[1]
+    return n
     
 @app.route('/andagain')
 def andagain():
-    rg = os.args()
-    return rg
+    return sys.argv[1]
 
 if __name__ == '__main__':
     app.run()
