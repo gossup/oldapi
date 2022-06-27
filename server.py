@@ -4,13 +4,17 @@ import json
 import http.client
 from collections import Counter
 from flask import Flask, render_template
+from urllib.parse import urlparse
+from urllib.parse import parse_qs
 
 app = Flask(__name__)
 
 @app.route('/')
 def main():
-    port = os.getenv("name")
-    return port
+    url = os.getenv("URL")
+    parsed_url = urlparse(url)
+    captured_value = parse_qs(parsed_url.query)['name'][0]
+    return captured_value
     
 @app.route('/next')
 def next():
