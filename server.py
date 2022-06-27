@@ -15,9 +15,9 @@ def main():
 @app.route('/next')
 def next():
     result = ""
-    for i in sys.argv:
+    for item, value in os.environ.items():
         old = result
-        result = old + i
+        result = old + '{}: {}'.format(item, value)
     return result
     
 @app.route('/again')
