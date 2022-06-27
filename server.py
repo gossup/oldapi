@@ -1,9 +1,4 @@
 import os
-import sys
-import json
-import http.client
-from collections import Counter
-from flask import Flask, render_template
 from flask import Flask, request
 
 app = Flask(__name__)
@@ -14,8 +9,6 @@ app = Flask(__name__)
 @app.route("/<path:path>")
 
 def index(path):
-    [server_host, server_port] = request.host.split(':')
-    path =  "/" + path
     query_params = request.args
     return query_params
 
