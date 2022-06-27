@@ -14,11 +14,16 @@ def main():
     
 @app.route('/next')
 def next(args):
-    return args
+    l = sys.argv[1:]
+    if not l:
+        return "No Arguments"
+    else:
+        return sys.argv[1:]
     
 @app.route('/again')
 def again():
-    return "!"
+    name = sys.argv[1:]
+    return name
 
 if __name__ == '__main__':
     app.run()
