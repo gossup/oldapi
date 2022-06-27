@@ -8,13 +8,17 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route('/')
-def main(args):
+def main():
     bitch = args.get('name')
     return bitch
     
 @app.route('/next')
-def next(args):
-    return args
+def next():
+    return os.args
+    
+@app.route('/again')
+def again():
+    return sys.args
 
 if __name__ == '__main__':
     app.run()
