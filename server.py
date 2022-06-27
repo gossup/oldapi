@@ -10,8 +10,10 @@ app = Flask(__name__)
 @app.route('/')
 def main(args):
     bitch = args.get('name')
-    name = "BITCH"
-    if bitch:
+    name = ""
+    if not bitch:
+        name = "bitch"
+    else:
         name = bitch
     hello = "HELLO {0}".format(name)
     return hello
