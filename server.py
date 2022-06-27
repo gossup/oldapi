@@ -19,6 +19,7 @@ def next():
     url = os.getenv("URL")
     parsed_url = urlparse(url)
     captured_value = parse_qs(parsed_url.query)['name'][0]
+    return captured_value
     
 @app.route('/url')
 def andagain():
