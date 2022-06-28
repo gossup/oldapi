@@ -32,10 +32,10 @@ def next():
     if not since:
         return { 'Error': "Missing since." }
         
-#    split = since.split(',')
-#
-#    createdAt = "'{0} {1}'".format(split[0], split[1])
-    return { 'message': since }
+    split = since.split(',')
+    createdAt = "'{0} {1}'".format(split[0], split[1])
+    
+    return { 'message': createdAt }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
