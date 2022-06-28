@@ -9,7 +9,12 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    name = request.args.get('name')
+    token = request.args.get('token')
+    if not token:
+        return { 'message': "Missing token." }
+    name = request.json['name']
+    if not name:
+        return { 'message': "Missing name." }
     return { 'message': name }
 
 @app.route('/next', methods=['POST', 'GET'])
@@ -21,11 +26,12 @@ def next():
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
-    content = request.json
-    json = jsonify(content)
-    name = json.get('name')
-    if not name:
+    token = request.args.get('token')
+    if not token:
         return { 'message': "Missing token." }
+    name = request.json['name']
+    if not name:
+        return { 'message': "Missing name." }
     return { 'message': name }
 
 @app.route('/andagain', methods=['POST', 'GET'])
