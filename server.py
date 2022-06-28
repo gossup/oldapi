@@ -30,9 +30,11 @@ def next():
     if not token:
         return { 'message': "Missing token." }
     
-    since = request.args.get('since')
-    if not since:
-        return { 'Error': request.args }
+    name = request.args.get('name')
+    if not name:
+        return { 'Error': "Missing Name" }
+        
+    return { 'message': name }
         
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
 
