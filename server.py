@@ -29,10 +29,15 @@ def next():
     token = request.args.get('token')
     if not token:
         return { 'Error': "Missing token." }
-    
     since = request.json['since']
     if not since:
         return { 'Error': "Missing since." }
+        
+    split = since.split(',')
+    if len(split) < 2:
+        return { 'Error': "since is in an incorrect format." }
+
+    since = "{0} {1}".format(split[0], split[1])
                 
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
 
