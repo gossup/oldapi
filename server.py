@@ -9,16 +9,13 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-#    input_json = request.get_json(force=True)
-    return { 'input': "input_json" }
+    input_json = request.get_json(force=True)
+    return { 'input': input_json }
     
 @app.route('/next', methods=['POST', 'GET'])
 def next():
-    result = ""
-    for i in sys.argv:
-        old = result
-        result = old + i
-    return result
+    input_json = request.get_json(force=True)
+    return { 'input': jsonify(input_json) }
     
 @app.route('/again', methods=['POST', 'GET'])
 def again():
