@@ -9,7 +9,7 @@ class ItemStore(object):
     def __init__(self):
         self._items = {}
 
-    @app.route('/', methods=['POST'])
+    @app.route('/', methods=['POST', 'GET'])
     def items(self, request):
         request.setHeader('Content-Type', 'application/json')
         return json.dumps(self._items)
