@@ -9,8 +9,8 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    input_json = request.get_json(force=True)
-    return input_json
+#    input_json = request.get_json(force=True)
+    return "input_json"
     
 @app.route('/next', methods=['POST', 'GET'])
 def next():
