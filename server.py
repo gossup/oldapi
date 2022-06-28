@@ -29,7 +29,7 @@ class ItemStore(object):
 
 if __name__ == '__main__':
     store = ItemStore()
-    store.app.run('localhost', 8080)
+    store.app.run('https://api.ppgf3y0ml0p.us-south.codeengine.appdomain.cloud', 8080)
 
 #import os
 #import sys
