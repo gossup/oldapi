@@ -22,20 +22,18 @@ def next():
     
     depID = os.getenv('depID')
     if not depID:
-        return { 'message': "Missing depID." }
+        return { 'Error': "Missing depID." }
     hostname = os.getenv('db2-hostname')
     if not hostname:
-        return { 'message': "Missing hostname." }
+        return { 'Error': "Missing hostname." }
     token = request.args.get('token')
     if not token:
-        return { 'message': "Missing token." }
+        return { 'Error': "Missing token." }
     
-    name = request.args.get('name')
-    if not name:
-        return { 'Error': "Missing Name" }
-        
-    return { 'message': name }
-        
+    since = request.json['since']
+    if not since:
+        return { 'Error': "Missing since." }
+                
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
 
     getPostsSqlCommand = {
