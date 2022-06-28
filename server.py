@@ -14,16 +14,19 @@ def main():
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
-    name = request.args.get("name")
-    if not name:
-        return { 'message': request.args }
-    return { 'message': name }
+    token = request.args.get('token')
+    if not token:
+        return { 'message': "Missing token." }
+    return { 'message': token }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
-    input_json = request.args
-    args = jsonify(input_json)
-    return args
+    content = request.json
+    json = jsonify(content)
+    name = json.get('name')
+    if not name:
+        return { 'message': "Missing token." }
+    return { 'message': name }
 
 @app.route('/andagain', methods=['POST', 'GET'])
 def andagain():
