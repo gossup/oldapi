@@ -26,6 +26,12 @@ def next():
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'message': "Missing depID." }
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return { 'message': "Missing hostname." }
     token = request.args.get('token')
     if not token:
         return { 'message': "Missing token." }
