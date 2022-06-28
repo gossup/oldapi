@@ -1,16 +1,19 @@
 import os
-from flask import Flask, request
+from flask import Flask, render_template, request, url_for, jsonify
 
 app = Flask(__name__)
 
-# Route all possible paths here
-@app.route("/", defaults={"path": ""})
-@app.route('/<string:path>')
-@app.route("/<path:path>")
+@app.route('/test', methods=['POST'])
+def my_test_endpoint():
+    input_json = request.get_json(force=True)
+    # force=True, above, is necessary if another developer
+    # forgot to set the MIME type to 'application/json'
+    print 'data from client:', input_json
+    dictToReturn = {'answer':42}
+    return jsonify(dictToReturn)
 
-def index(path):
-    query_params = request.args
-    return query_params
+if __name__ == '__main__':
+    app.run(debug=True)
 
 #@app.route('/')
 #def main():
