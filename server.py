@@ -34,8 +34,6 @@ def next():
         return { 'Error': "Missing since." }
         
     split = since.split(',')
-    if len(split) < 2:
-        return { 'Error': "since is in an incorrect format." }
 
     createdAt = "'{0} {1}'".format(split[0], split[1])
                 
