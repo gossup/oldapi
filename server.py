@@ -32,7 +32,7 @@ def next():
     
     since = request.args.get('since')
     if not since:
-        return { 'Error': "Missing since." }
+        return { 'Error': request.args }
         
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
 
