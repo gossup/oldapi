@@ -10,21 +10,20 @@ app = Flask(__name__)
 @app.route('/', methods=['POST', 'GET'])
 def main():
     name = request.args.get('name')
-    if not name:
-        return { 'message': request.args }
     return { 'message': name }
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
-    name = request.args.get('name')
+    name = request.args.get("name")
     if not name:
-        return { 'message': "NO NAME" }
+        return { 'message': request.args }
     return { 'message': name }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
-    input_json = request.get_json(force=True)
-    return jsonify(input_json)
+    input_json = request.args
+    args = jsonify(input_json)
+    return args
 
 @app.route('/andagain', methods=['POST', 'GET'])
 def andagain():
