@@ -35,7 +35,47 @@ def next():
     split = since.split(',')
     createdAt = "'{0} {1}'".format(split[0], split[1])
     
-    return { 'message': createdAt }
+    getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(createdAt)
+
+    getPostsSqlCommand = {
+        'commands': getPostsCommand,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    headers = {
+    'accept': "application/json",
+    'authorization': "Bearer {}".format(token),
+    'content-type': "application/json",
+    'x-deployment-id': "{}".format(depID)
+    }
+    
+    conn = http.client.HTTPSConnection(hostName)
+    
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(getPostsSqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+    
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
+    
+    getRes = conn.getresponse()
+    getData = getRes.read()
+    
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    # if len(results) == 0:
+    #     return { 'Error': "Missing rows from frist query." }
+    
+    if len(rows) == 0:
+        return { 'Error': "Missing rows from first query." }
+    
+    return { 'message': rows }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
