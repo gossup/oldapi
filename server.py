@@ -19,7 +19,6 @@ def main():
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
-    
     depID = os.getenv('depID')
     if not depID:
         return { 'Error': "Missing depID." }
@@ -33,11 +32,10 @@ def next():
     if not since:
         return { 'Error': "Missing since." }
         
-    split = since.split(',')
-
-    createdAt = "'{0} {1}'".format(split[0], split[1])
-
-    return { 'message': createdAt }
+#    split = since.split(',')
+#
+#    createdAt = "'{0} {1}'".format(split[0], split[1])
+    return { 'message': since }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
