@@ -12,9 +12,6 @@ def my_test_endpoint():
     dictToReturn = {'answer':42}
     return jsonify(dictToReturn)
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 #@app.route('/')
 #def main():
 #    port = os.getenv("PORT")
