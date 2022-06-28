@@ -36,21 +36,23 @@ def next():
 #    split = since.split(',')
 #
 #    createdAt = "'{0} {1}'".format(split[0], split[1])
+
+    return { 'message': since }
                 
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
 
     getPostsSqlCommand = {
-        'commands': getPostsCommand,
-        'limit': 1000,
-        'separator': ";",
-        'stop_on_error': "yes"
+    'commands': getPostsCommand,
+    'limit': 1000,
+    'separator': ";",
+    'stop_on_error': "yes"
     }
     
     headers = {
-        'accept': "application/json",
-        'authorization': "Bearer {}".format(token),
-        'content-type': "application/json",
-        'x-deployment-id': "{}".format(depID)
+    'accept': "application/json",
+    'authorization': "Bearer {}".format(token),
+    'content-type': "application/json",
+    'x-deployment-id': "{}".format(depID)
     }
     
     conn = http.client.HTTPSConnection(hostName)
