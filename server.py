@@ -11,7 +11,7 @@ app = Flask(__name__)
 def main():
     name = request.args.get('name')
     if not name:
-        return { 'message': "NO NAME" }
+        return { 'message': request.args }
     return { 'message': name }
 
 @app.route('/next', methods=['POST', 'GET'])
