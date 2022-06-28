@@ -57,25 +57,8 @@ def next():
 
     postRes = conn.getresponse()
     postData = postRes.read()
-
-    transactionID = json.loads(postData.decode("utf-8")).get('id')
     
-    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
-    
-    getRes = conn.getresponse()
-    getData = getRes.read()
-    
-    # status = json.loads(getData.decode("utf-8")).get('status')
-    # return { 'HERE': json.loads(getData.decode("utf-8")) }
-    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
-    
-    # if len(results) == 0:
-    #     return { 'Error': "Missing rows from frist query." }
-    
-    if len(rows) == 0:
-        return { 'Error': "Missing rows from first query." }
-    
-    return { 'message': rows }
+    return { 'message': getPostsCommand }
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
