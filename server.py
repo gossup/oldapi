@@ -22,15 +22,13 @@ def next():
     
 @app.route('/again', methods=['POST', 'GET'])
 def again():
-    url = os.environ['HTTP_HOST']
-    uri = os.environ['REQUEST_URI']
-    return url + uri
+    input_json = request.get_json(force=True)
+    return jsonify(input_json)
     
 @app.route('/andagain', methods=['POST', 'GET'])
 def andagain():
-    url = os.getenv('HTTP_HOST')
-    uri = os.getenv('REQUEST_URI')
-    return url + uri
+    input_json = request.get_json(force=True)
+    return input_json
 
 if __name__ == '__main__':
     app.run()
