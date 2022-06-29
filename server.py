@@ -4,8 +4,16 @@ import json
 import http.client
 from collections import Counter
 from flask import Flask, render_template, request, url_for, jsonify
+from flask_db2 import DB2
 
 app = Flask(__name__)
+app.config['DB2_DATABASE'] = os.getenv('depID')
+app.config['DB2_HOSTNAME'] = os.getenv('db2-hostname')
+app.config['DB2_PORT'] = 50000
+app.config['DB2_PROTOCOL'] = 'TCPIP'
+app.config['DB2_USER'] = os.getenv('db2-user')
+app.config['DB2_PASSWORD'] = os.getenv('db2-password')
+db = DB2(app)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -272,14 +280,6 @@ def next():
     userGetData = userGetRes.read()
     
     return { 'message': json.loads(userGetData.decode("utf-8")), 'activeUserTopics': activeUserTopics }
-    
-def Most_Common(lst):
-    data = Counter(lst)
-    return data.most_common(5)
-    
-def Most_Common_Topic(lst):
-    data = Counter(lst)
-    return data.most_common(1)
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
@@ -301,6 +301,19 @@ def again():
 def andagain():
     input_json = request.get_json(force=True)
     return input_json
+    
+
+def Most_Common(lst):
+    data = Counter(lst)
+    return data.most_common(5)
+    
+def Most_Common_Topic(lst):
+    data = Counter(lst)
+    return data.most_common(1)
+    
+def connectToDB2():
+    
+
 
 if __name__ == '__main__':
     app.run()
