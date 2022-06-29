@@ -285,22 +285,67 @@ def Most_Common_Topic(lst):
 def again():
     depID = os.getenv('depID')
     if not depID:
-        return { 'message': "Missing depID." }
+        return { 'Error': "Missing depID." }
     hostname = os.getenv('db2-hostname')
     if not hostname:
-        return { 'message': "Missing hostname." }
+        return { 'Error': "Missing hostname." }
     token = request.args.get('token')
     if not token:
-        return { 'message': "Missing token." }
+        return { 'Error': "Missing token." }
     name = request.json['name']
     if not name:
-        return { 'message': "Missing name." }
+        return { 'Error': "Missing name." }
     return { 'message': name }
 
 @app.route('/andagain', methods=['POST', 'GET'])
 def andagain():
-    input_json = request.get_json(force=True)
-    return input_json
+    
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'Error': "Missing depID." }
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return { 'Error': "Missing hostname." }
+    token = request.args.get('token')
+    if not token:
+        return { 'Error': "Missing token." }
+    name = request.json['name']
+    if not name:
+        return { 'Error': "Missing name." }
+    
+    command = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p GROUP BY parentId, createdBy ORDER BY p.createdAt LIMIT 1000 OFFSET 0;"
+
+    sqlCommand = {
+        'commands': command,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    headers = {
+    'accept': "application/json",
+    'authorization': "Bearer {}".format(token),
+    'content-type': "application/json",
+    'x-deployment-id': "{}".format(depID)
+    }
+    
+    conn = http.client.HTTPSConnection(hostname)
+    
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+    
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
+    
+    getRes = conn.getresponse()
+    getData = getRes.read()
+    
+    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return { 'message': rows }
 
 if __name__ == '__main__':
     app.run()
