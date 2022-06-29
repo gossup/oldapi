@@ -399,6 +399,103 @@ def test():
     
     return { 'message': json.loads(getData.decode("utf-8")) }
 
+@app.route('/test2', methods=['POST', 'GET'])
+def test2():
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'Error': "Missing depID." }
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return { 'Error': "Missing hostname." }
+    token = request.args.get('token')
+    if not token:
+        return { 'Error': "Missing token." }
+    
+    
+    getPostsCommand = "SELECT u.id FROM GOSSUP.user u;"
+
+    getPostsSqlCommand = {
+        'commands': getPostsCommand,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    headers = {
+    'accept': "application/json",
+    'authorization': "Bearer {}".format(token),
+    'content-type': "application/json",
+    'x-deployment-id': "{}".format(depID)
+    }
+    
+    conn = http.client.HTTPSConnection(hostname)
+    
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(getPostsSqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+    
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
+    
+    getRes = conn.getresponse()
+    getData = getRes.read()
+    
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+#    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return { 'message': json.loads(getData.decode("utf-8")) }
+    
+@app.route('/test3', methods=['POST', 'GET'])
+def test3():
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'Error': "Missing depID." }
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return { 'Error': "Missing hostname." }
+    token = request.args.get('token')
+    if not token:
+        return { 'Error': "Missing token." }
+    
+    
+    getPostsCommand = "SELECT u.id FROM GOSSUP.user u;"
+
+    getPostsSqlCommand = {
+        'commands': getPostsCommand,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    headers = {
+    'accept': "application/json",
+    'authorization': "Bearer {}".format(token),
+    'content-type': "application/json",
+    'x-deployment-id': "{}".format(depID)
+    }
+    
+    conn = http.client.HTTPSConnection(hostname)
+    
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(getPostsSqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+    
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
+    
+    getRes = conn.getresponse()
+    getData = getRes.read()
+    
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+#    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return { 'message': json.loads(getData.decode("utf-8")) }
 
 if __name__ == '__main__':
     app.run()
