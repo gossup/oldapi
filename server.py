@@ -23,8 +23,7 @@ def main():
     name = request.json['name']
     if not name:
         return { 'message': "Missing name." }
-    cur = db.connection.cursor()
-    return { 'message': cur.execute('SELECT * FROM GOSSUP.user') }
+    return { 'message': "BLAH" }
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
