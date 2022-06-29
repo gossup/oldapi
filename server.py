@@ -7,13 +7,6 @@ from flask import Flask, render_template, request, url_for, jsonify
 from flask_db2 import DB2
 
 app = Flask(__name__)
-app.config['DB2_DATABASE'] = os.getenv('depID')
-app.config['DB2_HOSTNAME'] = os.getenv('db2-hostname')
-app.config['DB2_PORT'] = 50000
-app.config['DB2_PROTOCOL'] = 'TCPIP'
-app.config['DB2_USER'] = os.getenv('db2-user')
-app.config['DB2_PASSWORD'] = os.getenv('db2-password')
-db = DB2(app)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
