@@ -4,7 +4,6 @@ import json
 import http.client
 from collections import Counter
 from flask import Flask, render_template, request, url_for, jsonify
-from flask_db2 import DB2
 
 app = Flask(__name__)
 
@@ -16,7 +15,7 @@ def main():
     name = request.json['name']
     if not name:
         return { 'message': "Missing name." }
-    return { 'message': "BLAH" }
+    return { 'message': name }
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
@@ -273,6 +272,14 @@ def next():
     userGetData = userGetRes.read()
     
     return { 'message': json.loads(userGetData.decode("utf-8")), 'activeUserTopics': activeUserTopics }
+    
+def Most_Common(lst):
+    data = Counter(lst)
+    return data.most_common(5)
+    
+def Most_Common_Topic(lst):
+    data = Counter(lst)
+    return data.most_common(1)
 
 @app.route('/again', methods=['POST', 'GET'])
 def again():
@@ -294,19 +301,6 @@ def again():
 def andagain():
     input_json = request.get_json(force=True)
     return input_json
-    
-
-def Most_Common(lst):
-    data = Counter(lst)
-    return data.most_common(5)
-    
-def Most_Common_Topic(lst):
-    data = Counter(lst)
-    return data.most_common(1)
-    
-def connectToDB2():
-    
-
 
 if __name__ == '__main__':
     app.run()
