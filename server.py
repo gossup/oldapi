@@ -8,7 +8,23 @@ from flask import Flask, render_template, request, url_for, jsonify
 
 app = Flask(__name__)
 
-conn = ibm_db.connect("DATABASE={0};HOSTNAME={1};PORT={2};PROTOCOL=TCPIP;UID={3};PWD={4};".format(os.getenv('depID'), os.getenv('db2-hostname'), os.getenv('db2-port'), os.getenv('db2-user'), os.getenv('db2-password')), "", "")
+didConnectToDB2 = False
+
+conn = ibm_db.connect("", "", "")
+
+def connectToDB2:
+    conn = ibm_db.connect("DATABASE={0};HOSTNAME={1};PORT={2};PROTOCOL=TCPIP;UID={3};PWD={4};".format(os.getenv('depID'), os.getenv('db2-hostname'), os.getenv('db2-port'), os.getenv('db2-user'), os.getenv('db2-password')), "", "")
+    if conn:
+        return True
+    else:
+        return False
+
+def executeQuery():
+    rows = []
+    if connectToDB2():
+        return ["1"]
+    else:
+        return rows
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -499,6 +515,10 @@ def test3():
 #    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
     
     return { 'message': json.loads(getData.decode("utf-8")) }
+    
+@app.route('/test4', methods=['POST', 'GET'])
+def test4():
+    return { 'message': executeQuery() }
 
 if __name__ == '__main__':
     app.run()
