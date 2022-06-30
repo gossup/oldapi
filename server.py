@@ -4,6 +4,7 @@ import json
 import http.client
 from collections import Counter
 from flask import Flask, render_template, request, url_for, jsonify
+ibm_db.connect("DATABASE={0};HOSTNAME={1};PORT=50000;PROTOCOL=TCPIP;UID={2};PWD={3};".format(os.getenv('depID'), os.getenv('db2-hostname'), os.getenv('db2-user'), os.getenv('db2-password')), "", "")
 
 app = Flask(__name__)
 
