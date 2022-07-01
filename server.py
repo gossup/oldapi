@@ -17,10 +17,7 @@ def connectToDB2:
 
 def executeQuery():
     rows = []
-    if connectToDB2():
-        return ["1"]
-    else:
-        return rows
+    return rows
         
 @app.route('/test4', methods=['POST', 'GET'])
 def test4():
