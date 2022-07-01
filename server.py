@@ -1,7 +1,6 @@
 import os
 import sys
 import json
-import ibm_db
 import http.client
 from collections import Counter
 from flask import Flask, render_template, request, url_for, jsonify
