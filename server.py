@@ -1,10 +1,7 @@
-import requests
 from flask import Flask
 from threading import Thread
 
 app = Flask(__name__)
-
-s = requests.Session()
 
 @app.route('/')
 def home():
