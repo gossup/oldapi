@@ -1,5 +1,7 @@
 from flask import Flask
 from threading import Thread
+import sys
+import ibm_db
 
 app = Flask(__name__)
 
