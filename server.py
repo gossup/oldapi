@@ -9,13 +9,7 @@ app = Flask(__name__)
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    token = request.args.get('token')
-    if not token:
-        return { 'message': "Missing token." }
-    name = request.json['name']
-    if not name:
-        return { 'message': "Missing name." }
-    return { 'message': name }
+    return { 'message': "Hello" }
 
 if __name__ == '__main__':
     app.run()
