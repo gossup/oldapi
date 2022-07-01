@@ -516,7 +516,7 @@ def test3():
     
 @app.route('/test4', methods=['POST', 'GET'])
 def test4():
-    return { 'message': executeQuery() }
+    return { 'message': "executeQuery()" }
 
 if __name__ == '__main__':
     app.run()
