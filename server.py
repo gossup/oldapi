@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_db2 import DB2
 from threading import Thread
 
 app = Flask(__name__)
