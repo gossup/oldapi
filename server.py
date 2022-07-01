@@ -8,8 +8,6 @@ from flask import Flask, render_template, request, url_for, jsonify
 
 app = Flask(__name__)
 
-didConnectToDB2 = False
-
 conn = ibm_db.connect("", "", "")
 
 def connectToDB2:
