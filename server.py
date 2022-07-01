@@ -7,22 +7,6 @@ from flask import Flask, render_template, request, url_for, jsonify
 
 app = Flask(__name__)
 
-def connectToDB2:
-    return True
-#    conn = ibm_db.connect("DATABASE={0};HOSTNAME={1};PORT={2};PROTOCOL=TCPIP;UID={3};PWD={4};".format(os.getenv('depID'), os.getenv('db2-hostname'), os.getenv('db2-port'), os.getenv('db2-user'), os.getenv('db2-password')), "", "")
-#    if conn:
-#        return True
-#    else:
-#        return False
-
-def executeQuery():
-    rows = []
-    return rows
-        
-@app.route('/test4', methods=['POST', 'GET'])
-def test4():
-    return { 'message': "executeQuery()" }
-
 @app.route('/', methods=['POST', 'GET'])
 def main():
     token = request.args.get('token')
