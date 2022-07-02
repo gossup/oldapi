@@ -1,22 +1,48 @@
 from flask import Flask
-from flask_db2 import DB2
+from database_engine import session_scope
+from threading import Thread
+from models import Transaction
 
 app = Flask(__name__)
 
-app.config['DB2_DATABASE'] = 'sample'
-app.config['DB2_HOSTNAME'] = 'localhost'
-app.config['DB2_PORT'] = 50000
-app.config['DB2_PROTOCOL'] = 'TCPIP'
-app.config['DB2_USER'] = 'db2inst1'
-app.config['DB2_PASSWORD'] = 'db2inst1'
-
-db = DB2(app) #You forgot that
-
-
 @app.route('/')
 def index():
-    cur = db.connection.cursor()
-    return cur.execute("")
+    return { 'message': "HELLO" }
+    
+def run():
+  app.run()
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+if __name__ == '__main__':
+    with session_scope() as session:
+        results = session.query(Transaction).limit(10)
+        for result in results:
+            print(result.id)
+            
+keep_alive()
+
+#from flask import Flask
+#from flask_db2 import DB2
+#
+#app = Flask(__name__)
+#
+#app.config['DB2_DATABASE'] = 'sample'
+#app.config['DB2_HOSTNAME'] = 'localhost'
+#app.config['DB2_PORT'] = 50000
+#app.config['DB2_PROTOCOL'] = 'TCPIP'
+#app.config['DB2_USER'] = 'db2inst1'
+#app.config['DB2_PASSWORD'] = 'db2inst1'
+#
+#db = DB2(app) #You forgot that
+#
+#
+#@app.route('/')
+#def index():
+#    cur = db.connection.cursor()
+#    return cur.execute("")
 
 #from flask import Flask
 #from threading import Thread
