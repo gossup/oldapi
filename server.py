@@ -40,31 +40,5 @@ def again():
         return { 'message': "Missing name." }
     return { 'message': name }
 
-@app.route('/andagain', methods=['POST', 'GET'])
-def andagain():
-    input_json = request.get_json(force=True)
-    return input_json
-
 if __name__ == '__main__':
     app.run()
-
-
-#mport Flask
-#from threading import Thread
-#import sys
-#import ibm_db
-#
-#app = Flask(__name__)
-#
-#@app.route('/')
-#def home():
-#    return f"<h1>😎I'm Awake Already!🔥</h1>"
-#
-#def run():
-#  app.run()
-#
-#def keep_alive():
-#    t = Thread(target=run)
-#    t.start()
-#
-#keep_alive()
