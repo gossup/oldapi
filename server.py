@@ -1,28 +1,30 @@
+import os
+import json
+import time
+import logging
+import requests
+from requests.auth import HTTPBasicAuth
 from flask import Flask
-from database_engine import session_scope
-from threading import Thread
-from models import Transaction
 
 app = Flask(__name__)
 
+logging.basicConfig(level=logging.DEBUG)
+start_time = time.time()
+
 @app.route('/')
-def index():
-    return { 'message': "HELLO" }
-    
-def run():
-  app.run()
+def get_venmo_data():
+  session = requests.Session()
+  url = "https://venmo.com/api/v5/public?limit={}"
+  for i in range(50):
+    response = session.get(url.format(1))
+    response_dict = json.loads(response.text)
+    for transaction in response_dict["data"]:
+      print(unicode(transaction["message"]))
+    url = response_dict["paging"]["next"] + "&limit={}"
 
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
+if __name__ == "__main__":
+    app.run()
 
-if __name__ == '__main__':
-    with session_scope() as session:
-        results = session.query(Transaction).limit(10)
-        for result in results:
-            print(result.id)
-            
-keep_alive()
 
 #from flask import Flask
 #from flask_db2 import DB2
