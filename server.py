@@ -12,7 +12,7 @@ def main():
     token = request.args.get('token')
     if not token:
         return { 'message': "Missing token." }
-    name = request.json['name']
+    name = request.args.get('token')
     if not name:
         return { 'message': "Missing name." }
     return { 'message': name }
