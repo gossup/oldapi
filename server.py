@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import http.client
+import requests
 from collections import Counter
 from flask import Flask, render_template, request, url_for, jsonify
 
@@ -33,13 +34,13 @@ def next():
     if not since:
         return { 'Error': "Missing since." }
         
-#    split = since.split(',')
-#
-#    createdAt = "'{0} {1}'".format(split[0], split[1])
+    split = since.split(',')
 
-    return { 'message': since }
+    createdAt = "'{0} {1}'".format(split[0], split[1])
+
+    return { 'message': createdAt }
                 
-    getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(since)
+    getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(createdAt)
 
     getPostsSqlCommand = {
     'commands': getPostsCommand,
