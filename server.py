@@ -37,8 +37,6 @@ def next():
 
     createdAt = "'{0} {1}'".format(split[0], split[1])
 
-    return { 'message': createdAt }
-
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(createdAt)
 
     getPostsSqlCommand = {
