@@ -53,7 +53,7 @@ def next():
     'x-deployment-id': "{}".format(depID)
     }
 
-    conn = http.client.HTTPSConnection(hostName)
+    conn = http.client.HTTPSConnection(hostname)
 
     conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(getPostsSqlCommand))
 
