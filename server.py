@@ -15,8 +15,8 @@ db = DB2(app)
 
 @app.route('/')
 def index():
-    cur = db.connection.cursor()
-    return { 'message': cur.execute('SELECT u.id FROM GOSSUP.user u') }
+#    cur = db.connection.cursor()
+    return { 'message': "cur.execute('SELECT u.id FROM GOSSUP.user u')" }
 
 #import os
 #import sys
