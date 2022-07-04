@@ -1,13 +1,15 @@
-import sys
+import flask
 import requests
-import json
-from flask import Flask
+import responses
+import requests_mock
 
-app = Flask(__name__)
+from requests_mock_flask import add_flask_app_to_mock
 
-@app.route('/', methods=['POST', 'GET'])
-def main():
-    return {'message': "Hello there"}
+app = flask.Flask(__name__)
+
+@app.route('/')
+def _() -> str:
+    return 'Hello, World!'
 
 #import os
 #import sys
