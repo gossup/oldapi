@@ -1,9 +1,5 @@
 import flask
 import requests
-import responses
-import requests_mock
-
-from requests_mock_flask import add_flask_app_to_mock
 
 app = flask.Flask(__name__)
 
