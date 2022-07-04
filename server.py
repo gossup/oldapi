@@ -7,6 +7,8 @@ from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
 
+conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
     token = request.args.get('token')
@@ -29,7 +31,7 @@ def next():
     token = request.args.get('token')
     if not token:
         return { 'Error': "Missing token." }
-    since = request.json['since']
+    since = request.json['since'] #only for POST
     if not since:
         return { 'Error': "Missing since." }
 
@@ -54,8 +56,6 @@ def next():
     'content-type': "application/json",
     'x-deployment-id': "{}".format(depID)
     }
-
-    conn = http.client.HTTPSConnection(hostName)
 
     conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(getPostsSqlCommand))
 
