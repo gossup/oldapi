@@ -1,11 +1,22 @@
-import flask
-import requests
+from flask import Flask
+from flask_db2 import DB2
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
+
+app.config['DB2_DATABASE'] = os.getenv('depID')
+app.config['DB2_HOSTNAME'] = os.getenv('db2-hostname')
+app.config['DB2_PORT'] = os.getenv('db2-port')
+app.config['DB2_PROTOCOL'] = 'TCPIP'
+app.config['DB2_USER'] = os.getenv('db2-user')
+app.config['DB2_PASSWORD'] = os.getenv('db2-password')
+
+db = DB2(app)
+
 
 @app.route('/')
-def _() -> str:
-    return 'Hello, World!'
+def index():
+    cur = db.connection.cursor()
+    return { 'message': cur.execute('SELECT u.id FROM GOSSUP.user u') }
 
 #import os
 #import sys
