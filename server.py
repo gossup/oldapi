@@ -14,7 +14,8 @@ def main():
     count = ""
     if 'count' not in session:
         count = session['count']
-    newCount = count + "1"
+    newValue = "1"
+    newCount = "{}{}".format(count, newValue)
     session['count'] = newCount
     return { 'count': newCount }
     
