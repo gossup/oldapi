@@ -13,7 +13,7 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 def main():
 
     command = "SELECT u.id FROM GOSSUP.user u;"
-    return { 'message': command }
+
     sqlCommand = {
         'commands': command,
         'limit': 1000,
@@ -21,7 +21,7 @@ def main():
         'stop_on_error': "yes"
     }
     
-    conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(getPostsSqlCommand))
+    conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(sqlCommand))
 
     postRes = conn.getresponse()
     postData = postRes.read()
