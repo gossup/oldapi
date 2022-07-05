@@ -12,34 +12,45 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 @app.route('/', methods=['POST', 'GET'])
 def main():
 
-    command = "SELECT u.id FROM GOSSUP.user u;"
-
-    sqlCommand = {
-        'commands': command,
-        'limit': 1000,
-        'separator': ";",
-        'stop_on_error': "yes"
-    }
+    previousCount = session['count']
+    if not previousCount:
+        previousCount = 1
+        
+    count = previousCount + 1
     
-    conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(sqlCommand))
-
-    postRes = conn.getresponse()
-    postData = postRes.read()
+    session['count'] = count
     
-    return { 'Here' : json.loads(postData.decode("utf-8")) }
-
-    transactionID = json.loads(postData.decode("utf-8")).get('id')
-
-    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
-
-    getRes = conn.getresponse()
-    getData = getRes.read()
-
-    # status = json.loads(getData.decode("utf-8")).get('status')
-    # return { 'HERE': json.loads(getData.decode("utf-8")) }
-    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
-    
-    return { 'message': rows }
+    return { 'count': session['count'] }
+#def main():
+#
+#    command = "SELECT u.id FROM GOSSUP.user u;"
+#
+#    sqlCommand = {
+#        'commands': command,
+#        'limit': 1000,
+#        'separator': ";",
+#        'stop_on_error': "yes"
+#    }
+#
+#    conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(sqlCommand))
+#
+#    postRes = conn.getresponse()
+#    postData = postRes.read()
+#
+#    return { 'Here' : json.loads(postData.decode("utf-8")) }
+#
+#    transactionID = json.loads(postData.decode("utf-8")).get('id')
+#
+#    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+#
+#    getRes = conn.getresponse()
+#    getData = getRes.read()
+#
+#    # status = json.loads(getData.decode("utf-8")).get('status')
+#    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+#    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+#
+#    return { 'message': rows }
     
 
 @app.route('/next', methods=['POST', 'GET'])
@@ -330,15 +341,12 @@ def andagain():
     input_json = request.get_json(force=True)
     return input_json
     
-def setUpDatabase():
+def setUpDatabase(token):
     depID = os.getenv('depID')
     if not depID:
         return False
     hostname = os.getenv('db2-hostname')
     if not hostname:
-        return False
-    token = request.args.get('token')
-    if not token:
         return False
         
     headers = {
