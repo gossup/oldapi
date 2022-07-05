@@ -11,11 +11,12 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    count = session['count']
-    if not count:
-        return { 'Error': "Missing Count" }
-    session['count'] = count + "1"
-    return { 'count': count }
+    count = ""
+    if session['count']:
+        count = session['count']
+    newCount = count + "1"
+    session['count'] = newCount
+    return { 'count': newCount }
     
 #def main():
 #
