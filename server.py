@@ -3,20 +3,22 @@ import sys
 import json
 import http.client
 from collections import Counter
-from flask import Flask, render_template, request, session, url_for, jsonify
+from flask import Flask, render_template, request, session, url_for, jsonify, g
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
+features_ready = None
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
     count = "1"
-    if 'count' in session:
-        count = session['count']
+    if 'count' in g:
+        count = g['count']
     newValue = "0"
     newCount = "{}{}".format(count, newValue)
-    session['count'] = newCount
+    g['count'] = newCount
     return { 'count': newCount }
     
 #def main():
