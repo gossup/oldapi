@@ -2,9 +2,9 @@ import os
 import sys
 import json
 import http.client
+import ibm_db
 from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify, g
-from flask_db2 import DB2
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
