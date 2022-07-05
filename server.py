@@ -2,7 +2,7 @@ import os
 import sys
 import json
 import http.client
-import ibm_db
+import ibm-db
 from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify, g
 
