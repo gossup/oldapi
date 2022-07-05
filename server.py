@@ -7,18 +7,25 @@ from flask import Flask, render_template, request, session, url_for, jsonify, g
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
-conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 features_ready = ""
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    global features_ready
-    count = features_ready
+    count = "1"
+    if 'count' in g:
+        count = g['count']
     newValue = "0"
     newCount = "{}{}".format(count, newValue)
-    features_ready = newCount
-    return { 'count': features_ready }
+    g['count'] = newCount
+    return { 'count': newCount }
+#def main():
+#    global features_ready
+#    count = features_ready
+#    newValue = "0"
+#    newCount = "{}{}".format(count, newValue)
+#    features_ready = newCount
+#    return { 'count': features_ready }
 
 
 #def main():
