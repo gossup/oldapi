@@ -9,17 +9,26 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
-features_ready = None
+features_ready = ""
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    count = "1"
-    if 'count' in g:
-        count = g['count']
+    global features_ready
+    count = features_ready
     newValue = "0"
     newCount = "{}{}".format(count, newValue)
-    g['count'] = newCount
-    return { 'count': newCount }
+    features_ready = newCount
+    return { 'count': features_ready }
+
+
+#def main():
+#    count = "1"
+#    if 'count' in g:
+#        count = g['count']
+#    newValue = "0"
+#    newCount = "{}{}".format(count, newValue)
+#    g['count'] = newCount
+#    return { 'count': newCount }
     
 #def main():
 #
