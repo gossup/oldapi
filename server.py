@@ -11,10 +11,10 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    count = ""
-    if 'count' not in session:
+    count = "1"
+    if 'count' in session:
         count = session['count']
-    newValue = "1"
+    newValue = "0"
     newCount = "{}{}".format(count, newValue)
     session['count'] = newCount
     return { 'count': newCount }
