@@ -25,6 +25,8 @@ def main():
 
     postRes = conn.getresponse()
     postData = postRes.read()
+    
+    return { 'Here' : json.loads(postData.decode("utf-8")) }
 
     transactionID = json.loads(postData.decode("utf-8")).get('id')
 
