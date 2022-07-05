@@ -9,10 +9,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
-session['count'] = '1'
-
 @app.route('/', methods=['POST', 'GET'])
 def main():
+    session['count'] = '1'
     count = session['count']
     if not count:
         return { 'Error': "Missing Count" }
