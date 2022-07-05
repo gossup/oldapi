@@ -6,19 +6,124 @@ from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify, g
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
-conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+app.config['SECRET_KEY'] = os.getenv('secret-key')
 
-features_ready = ""
+connection_ready = False
+connection = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
     global features_ready
-    count = features_ready
-    newValue = "0"
-    newCount = "{}{}".format(count, newValue)
-    features_ready = newCount
-    return { 'count': features_ready }
+    ready = features_ready
+    global connection
+    conn = connection
+    command = "SELECT u.id FROM GOSSUP.user u;"
+    if ready:
+        sqlCommand = {
+            'commands': command,
+            'limit': 1,
+            'separator': ";",
+            'stop_on_error': "yes"
+        }
+        conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(sqlCommand))
+        
+        postRes = conn.getresponse()
+        postData = postRes.read()
+
+        transactionID = json.loads(postData.decode("utf-8")).get('id')
+
+        conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+
+        getRes = conn.getresponse()
+        getData = getRes.read()
+
+        # status = json.loads(getData.decode("utf-8")).get('status')
+        # return { 'HERE': json.loads(getData.decode("utf-8")) }
+        rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+        return { 'rows': rows }
+    else:
+        headers = {
+            'accept': "application/json",
+            'authorization': "Bearer {}".format(token),
+            'content-type': "application/json",
+            'x-deployment-id': "{}".format(depID),
+            'Connection': keep-alive
+        }
+        sqlCommand = {
+            'commands': command,
+            'limit': 1,
+            'separator': ";",
+            'stop_on_error': "yes"
+        }
+        conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
+        
+        postRes = conn.getresponse()
+        postData = postRes.read()
+
+        transactionID = json.loads(postData.decode("utf-8")).get('id')
+
+        conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+
+        getRes = conn.getresponse()
+        getData = getRes.read()
+
+        # status = json.loads(getData.decode("utf-8")).get('status')
+        # return { 'HERE': json.loads(getData.decode("utf-8")) }
+        rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+        ready = True
+        return { 'rows': rows }
+
+def setUpDatabase(token):
+    depID = os.getenv('depID')
+    if not depID:
+        return False
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return False
+
+    headers = {
+        'accept': "application/json",
+        'authorization': "Bearer {}".format(token),
+        'content-type': "application/json",
+        'x-deployment-id': "{}".format(depID),
+        'Connection': keep-alive
+    }
+
+    global conn
+    conn = http.client.HTTPSConnection(hostname)
+    
+    rows = get()
+
+    return True
+    
+def get(request):
+    command = "SELECT u.id FROM GOSSUP.user u;"
+
+    sqlCommand = {
+        'commands': command,
+        'limit': 1,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+
+    getRes = conn.getresponse()
+    getData = getRes.read()
+
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return rows
 
 
 #def main():
@@ -349,26 +454,6 @@ def again():
 def andagain():
     input_json = request.get_json(force=True)
     return input_json
-    
-#def setUpDatabase(token):
-#    depID = os.getenv('depID')
-#    if not depID:
-#        return False
-#    hostname = os.getenv('db2-hostname')
-#    if not hostname:
-#        return False
-#
-#    headers = {
-#        'accept': "application/json",
-#        'authorization': "Bearer {}".format(token),
-#        'content-type': "application/json",
-#        'x-deployment-id': "{}".format(depID),
-#        'Connection': keep-alive
-#    }
-#
-#    conn = http.client.HTTPSConnection(hostname)
-#
-#    return True
     
 if __name__ == 'main':
     app.run()
