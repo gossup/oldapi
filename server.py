@@ -14,7 +14,7 @@ def main():
 
     previousCount = session['count']
     if not previousCount:
-        previousCount = 1
+        return { 'Error': "Missing Count"}
         
     count = previousCount + 1
     
@@ -363,4 +363,5 @@ def andagain():
 #    return True
     
 if __name__ == 'main':
-    app.run()
+    session['count'] = 1
+    app.run(debug=True)
