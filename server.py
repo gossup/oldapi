@@ -14,7 +14,7 @@ def main():
     count = session['count']
     if not count:
         return { 'Error': "Missing Count" }
-        
+    session['count'] = count + "1"
     return { 'count': count }
     
 #def main():
