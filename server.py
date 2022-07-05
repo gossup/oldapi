@@ -13,7 +13,7 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 def main():
 
     command = "SELECT u.id FROM GOSSUP.user u;"
-    
+    return { 'message': command }
     sqlCommand = {
         'commands': command,
         'limit': 1000,
