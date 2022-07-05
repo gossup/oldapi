@@ -60,11 +60,13 @@ def main():
 
 def getConn():
     global dict
-    conn = dict['conn']
+    dic = dict
+    conn = dic['conn']
     if conn:
         return conn
     newConn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
-    dict['conn'] = newConn
+    dic['conn'] = newConn
+    dict = dic
     return newConn
 
 #def main():
