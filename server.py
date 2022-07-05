@@ -61,7 +61,7 @@ def main():
 def getConn():
     global dict
     dic = dict
-    conn = dic['conn']
+    conn = dic.get('conn')
     if conn:
         return conn
     newConn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
