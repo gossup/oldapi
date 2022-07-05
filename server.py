@@ -7,15 +7,38 @@ from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
 
+conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    token = request.args.get('token')
-    if not token:
-        return { 'message': "Missing token." }
-    name = request.json['name'] #only for POST
-    if not name:
-        return { 'message': "Missing name." }
-    return { 'message': name }
+
+    command = "SELECT u.id FROM GOSSUP.user u;"
+    
+    sqlCommand = {
+        'commands': command,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    conn.request("POST", "/dbapi/v4/sql_jobs", body=json.dumps(getPostsSqlCommand))
+
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+
+    getRes = conn.getresponse()
+    getData = getRes.read()
+
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return { 'message': rows }
+    
 
 @app.route('/next', methods=['POST', 'GET'])
 def next():
@@ -40,17 +63,17 @@ def next():
     getPostsCommand = "SELECT p.parentId AS parentId, p.createdBy AS createdBy FROM GOSSUP.post p WHERE p.createdAt > {0} GROUP BY parentId, createdBy ORDER BY p.createdBy;".format(createdAt)
 
     getPostsSqlCommand = {
-    'commands': getPostsCommand,
-    'limit': 1000,
-    'separator': ";",
-    'stop_on_error': "yes"
+        'commands': getPostsCommand,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
     }
 
     headers = {
-    'accept': "application/json",
-    'authorization': "Bearer {}".format(token),
-    'content-type': "application/json",
-    'x-deployment-id': "{}".format(depID)
+        'accept': "application/json",
+        'authorization': "Bearer {}".format(token),
+        'content-type': "application/json",
+        'x-deployment-id': "{}".format(depID)
     }
 
     conn = http.client.HTTPSConnection(hostname)
@@ -305,5 +328,29 @@ def andagain():
     input_json = request.get_json(force=True)
     return input_json
     
+def setUpDatabase():
+    depID = os.getenv('depID')
+    if not depID:
+        return False
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return False
+    token = request.args.get('token')
+    if not token:
+        return False
+        
+    headers = {
+        'accept': "application/json",
+        'authorization': "Bearer {}".format(token),
+        'content-type': "application/json",
+        'x-deployment-id': "{}".format(depID),
+        'Connection': keep-alive
+    }
+
+    conn = http.client.HTTPSConnection(hostname)
+
+    return True
+    
 if __name__ == 'main':
+    setUpDatabase()
     app.run()
