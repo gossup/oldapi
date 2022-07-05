@@ -9,6 +9,8 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('secret-key')
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
+session['count'] = 1
+
 @app.route('/', methods=['POST', 'GET'])
 def main():
     count = session['count']
@@ -358,5 +360,4 @@ def andagain():
 #    return True
     
 if __name__ == 'main':
-    session['count'] = 1
     app.run(debug=True)
