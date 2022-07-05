@@ -2,26 +2,20 @@ import os
 import sys
 import json
 import http.client
-import requests
 from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
-
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+didConnect = False
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    previousCount = session['count']
-    return { 'Error': "Hello"}
-    if not previousCount:
-        return { 'Error': "Missing Count"}
-        
-    count = previousCount + 1
-    
-    session['count'] = count
-    
-    return { 'count': session['count'] }
+    if didConnect:
+        return { 'message': "Connected" }
+    else:
+        didConnect = True
+        return { 'message': "Connecting..." }
     
 #def main():
 #
