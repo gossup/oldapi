@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, session, url_for, jsonify, g
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 
-dict = { 'conn': None }
+dict = { 'conn': getConn() }
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -50,12 +50,8 @@ def main():
 
     getRes = conn.getresponse()
     getData = getRes.read()
-
-    # status = json.loads(getData.decode("utf-8")).get('status')
-    # return { 'HERE': json.loads(getData.decode("utf-8")) }
-    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
     
-    return { 'rows': rows }
+    return { 'message': json.loads(getData.decode("utf-8")) }
 
 
 def getConn():
