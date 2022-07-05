@@ -36,7 +36,7 @@ def main():
         'authorization': "Bearer {}".format(token),
         'content-type': "application/json",
         'x-deployment-id': "{}".format(depID),
-        'Connection': keep-alive
+        'Connection': "keep-alive"
     }
 
     conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
