@@ -24,10 +24,10 @@ def main():
         return { 'Error': "Missing token." }
 
     global features_ready
-    ready = features_ready
 
     command = "SELECT u.id FROM GOSSUP.user u;"
-    if ready:
+    
+    if features_ready == True:
         sqlCommand = {
             'commands': command,
             'limit': 1,
@@ -81,7 +81,7 @@ def main():
         # status = json.loads(getData.decode("utf-8")).get('status')
         # return { 'HERE': json.loads(getData.decode("utf-8")) }
         rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
-        ready = True
+        features_ready = True
         return { 'rows': rows }
 
 def setUpDatabase(token):
