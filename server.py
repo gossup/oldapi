@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('secret-key')
 
 connection_ready = False
-connection = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
@@ -25,8 +25,7 @@ def main():
 
     global features_ready
     ready = features_ready
-    global connection
-    conn = connection
+
     command = "SELECT u.id FROM GOSSUP.user u;"
     if ready:
         sqlCommand = {
@@ -66,9 +65,7 @@ def main():
             'separator': ";",
             'stop_on_error': "yes"
         }
-        
-        conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
-        
+                
         conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
         
         postRes = conn.getresponse()
@@ -85,7 +82,6 @@ def main():
         # return { 'HERE': json.loads(getData.decode("utf-8")) }
         rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
         ready = True
-        connection = conn
         return { 'rows': rows }
 
 def setUpDatabase(token):
