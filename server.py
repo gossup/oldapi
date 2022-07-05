@@ -6,10 +6,10 @@ from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.getenv('secret-key')
+app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
-session['count'] = 1
+session['count'] = '1'
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
