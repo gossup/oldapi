@@ -8,25 +8,64 @@ from flask import Flask, render_template, request, session, url_for, jsonify, g
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 
-features_ready = ""
+dict = { 'conn': None }
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    count = "1"
-    if 'count' in g:
-        count = g['count']
-    newValue = "0"
-    newCount = "{}{}".format(count, newValue)
-    g['count'] = newCount
-    return { 'count': newCount }
-#def main():
-#    global features_ready
-#    count = features_ready
-#    newValue = "0"
-#    newCount = "{}{}".format(count, newValue)
-#    features_ready = newCount
-#    return { 'count': features_ready }
+    
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'Error': "Missing depID." }
+    token = request.args.get('token')
+    if not token:
+        return { 'Error': "Missing token." }
 
+    conn = getConn()
+    
+    command = "SELECT u.id FROM GOSSUP.user u;"
+
+    sqlCommand = {
+        'commands': command,
+        'limit': 1000,
+        'separator': ";",
+        'stop_on_error': "yes"
+    }
+    
+    headers = {
+        'accept': "application/json",
+        'authorization': "Bearer {}".format(token),
+        'content-type': "application/json",
+        'x-deployment-id': "{}".format(depID),
+        'Connection': keep-alive
+    }
+
+    conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
+    
+    postRes = conn.getresponse()
+    postData = postRes.read()
+
+    transactionID = json.loads(postData.decode("utf-8")).get('id')
+
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+
+    getRes = conn.getresponse()
+    getData = getRes.read()
+
+    # status = json.loads(getData.decode("utf-8")).get('status')
+    # return { 'HERE': json.loads(getData.decode("utf-8")) }
+    rows = json.loads(getData.decode("utf-8")).get('results')[0]['rows']
+    
+    return { 'rows': rows }
+
+
+def getConn():
+    global dict
+    conn = dict['conn']
+    if conn:
+        return conn
+    newConn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+    dict['conn'] = newConn
+    return newConn
 
 #def main():
 #    count = "1"
