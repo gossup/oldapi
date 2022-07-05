@@ -11,7 +11,6 @@ conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    session['count'] = '1'
     count = session['count']
     if not count:
         return { 'Error': "Missing Count" }
@@ -359,4 +358,5 @@ def andagain():
 #    return True
     
 if __name__ == 'main':
+    session['count'] = '1'
     app.run()
