@@ -9,14 +9,23 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('secret-key')
 
 connection_ready = False
-connection = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
+    depID = os.getenv('depID')
+    if not depID:
+        return { 'Error': "Missing depID." }
+    hostname = os.getenv('db2-hostname')
+    if not hostname:
+        return { 'Error': "Missing hostname." }
+    token = request.args.get('token')
+    if not token:
+        return { 'Error': "Missing token." }
+
     global features_ready
     ready = features_ready
-    global connection
-    conn = connection
+    global conn
     command = "SELECT u.id FROM GOSSUP.user u;"
     if ready:
         sqlCommand = {
@@ -56,6 +65,9 @@ def main():
             'separator': ";",
             'stop_on_error': "yes"
         }
+        
+        conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
+        
         conn.request("POST", "/dbapi/v4/sql_jobs", headers=headers, body=json.dumps(sqlCommand))
         
         postRes = conn.getresponse()
