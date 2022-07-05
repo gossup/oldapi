@@ -6,7 +6,7 @@ from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
-app.secret_key = os.getenv('secret-key')
+app.config['SECRET_KEY'] = os.getenv('secret-key')
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
 
 @app.route('/', methods=['POST', 'GET'])
