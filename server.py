@@ -21,6 +21,7 @@ def main():
     session['count'] = count
     
     return { 'count': session['count'] }
+    
 #def main():
 #
 #    command = "SELECT u.id FROM GOSSUP.user u;"
@@ -341,26 +342,25 @@ def andagain():
     input_json = request.get_json(force=True)
     return input_json
     
-def setUpDatabase(token):
-    depID = os.getenv('depID')
-    if not depID:
-        return False
-    hostname = os.getenv('db2-hostname')
-    if not hostname:
-        return False
-        
-    headers = {
-        'accept': "application/json",
-        'authorization': "Bearer {}".format(token),
-        'content-type': "application/json",
-        'x-deployment-id': "{}".format(depID),
-        'Connection': keep-alive
-    }
-
-    conn = http.client.HTTPSConnection(hostname)
-
-    return True
+#def setUpDatabase(token):
+#    depID = os.getenv('depID')
+#    if not depID:
+#        return False
+#    hostname = os.getenv('db2-hostname')
+#    if not hostname:
+#        return False
+#
+#    headers = {
+#        'accept': "application/json",
+#        'authorization': "Bearer {}".format(token),
+#        'content-type': "application/json",
+#        'x-deployment-id': "{}".format(depID),
+#        'Connection': keep-alive
+#    }
+#
+#    conn = http.client.HTTPSConnection(hostname)
+#
+#    return True
     
 if __name__ == 'main':
-    setUpDatabase()
     app.run()
