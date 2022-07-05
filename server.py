@@ -8,7 +8,7 @@ from flask import Flask, render_template, request, session, url_for, jsonify, g
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'BlahDaBlahBlah'
 
-dict = { 'conn': getConn() }
+dict = { 'conn': http.client.HTTPSConnection(os.getenv('db2-hostname')) }
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
