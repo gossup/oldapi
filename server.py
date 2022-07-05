@@ -47,7 +47,7 @@ def main():
 
     transactionID = json.loads(postData.decode("utf-8")).get('id')
 
-    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID))
+    conn.request("GET", "/dbapi/v4/sql_jobs/{}".format(transactionID), headers=headers)
 
     getRes = conn.getresponse()
     getData = getRes.read()
