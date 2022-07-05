@@ -6,16 +6,12 @@ from collections import Counter
 from flask import Flask, render_template, request, session, url_for, jsonify
 
 app = Flask(__name__)
+app.secret_key = os.getenv('secret-key')
 conn = http.client.HTTPSConnection(os.getenv('db2-hostname'))
-didConnect = False
 
 @app.route('/', methods=['POST', 'GET'])
 def main():
-    if didConnect:
-        return { 'message': "Connected" }
-    else:
-        didConnect = True
-        return { 'message': "Connecting..." }
+    return { 'message': "Connected" }
     
 #def main():
 #
